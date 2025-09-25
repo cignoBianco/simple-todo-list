@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Todo from '../../interfaces/todoList';
 import TodoItem from '../TodoItem';
 
 
 interface TodoListProps {
     todosList: Todo[];
-    todoChangedHandler: (todo: Todo) => void;
+    todosChangedHandler: (todos: Todo[]) => void;
 }
 
-const TodoList: React.FC<TodoListProps> = ({todosList}) => {
-    const [todos, setTodos] = useState<Todo[]>(todosList);
+const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
+    const { todosList, todosChangedHandler } = props;
 
     return <div>
         <h2>Todos:</h2>
-        {todos.map(todo => <TodoItem todo={todo} onCheck={(id: number, isChecked: boolean) => {
-            const todoIndex = todos.findIndex(todo => todo.id === id);
-            if (todoIndex === -1) {
-                console.warn(`Todo with id=${id} was not find`);
-                return;
-            }
-            todo.checked = isChecked;
-
-        }} />)}
+        {todosList.map(todo => <TodoItem
+            key={todo.id}
+            todo={todo}
+            onItemChanged={(todo: Todo) => {
+                const result = [...todosList];
+                result[result.findIndex(td => td.id === todo.id)] = todo;
+                todosChangedHandler(result);
+            }}
+        />)}
     </div>;
 };
 

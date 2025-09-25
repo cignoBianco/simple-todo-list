@@ -6,19 +6,16 @@ import styles from './TodoItem.module.css';
 
 interface TodoItemProps {
     todo: Todo,
-    onCheck: (id: number, isChecked: boolean) => void;
+    onItemChanged: (todo: Todo) => void;
 }
 
 const TodoItem: React.FC<TodoItemProps> = (TodoItemProps) => {
-    const { todo } = TodoItemProps;
+    const { todo, onItemChanged } = TodoItemProps;
     const {id, title, description, checked} = todo;
 
-    const [currentTodo, setCurrentTodo] = React.useState<Todo>(todo);
-
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setCurrentTodo({...currentTodo, [name]: value});
-        //onCheck(currentTodo.id, value);
+        const { name, checked } = event.target;
+        onItemChanged({...todo, [name]: checked});
     };
 
     return <div className={styles.todoItem}>
