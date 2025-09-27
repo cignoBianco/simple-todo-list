@@ -3,10 +3,11 @@ import React from 'react';
 import Todo from '../../interfaces/todoList';
 
 import styles from './Panel.module.css';
+import Button from '../Button/Button';
 
 
 interface PanelProps {
-    addTodo: (todo: Todo) => void;
+    addTodo: ({ title, description }: Omit<Todo, 'checked' | 'id'>) => void;
 }
 
 const defaultTodo: Todo = {
@@ -34,32 +35,38 @@ const Panel: React.FC<PanelProps> = ({addTodo}) => {
         setTodo(defaultTodo);
     };
 
-    return <div>
-        <label htmlFor="title">
-            <div>Title</div>
-            <input
-                id='title'
-                name='title'
-                type="text"
-                maxLength={30}
-                value={title}
-                onChange={inputChangeHandler}
-            />
-        </label>
-        <label htmlFor="description">
-            <div>Description</div>
-            <input
-                id='description'
-                name='description'
-                type="text"
-                value={description}
-                onChange={inputChangeHandler}
-            />
-        </label>
-        <div>
-            <button onClick={addButtonHandler}>
-                ADD
-            </button>
+    return <div className={styles.todo_panel_container}>
+        <div className={styles.fields_container}>
+            <div className={styles.field_container}>
+                <label htmlFor="title">
+                    <div>Title</div>
+                    <input
+                        id='title'
+                        name='title'
+                        type="text"
+                        maxLength={30}
+                        value={title}
+                        onChange={inputChangeHandler}
+                    />
+                </label>
+            </div>
+            <div className={styles.field_container}>
+                <label htmlFor="description">
+                    <div>Description</div>
+                    <input
+                        id='description'
+                        name='description'
+                        type="text"
+                        value={description}
+                        onChange={inputChangeHandler}
+                    />
+                </label>
+            </div>
+            <div className={styles.button_container}>
+                <Button color='blue' onClick={addButtonHandler}>
+                    ADD
+                </Button>
+            </div>
         </div>
     </div>;
 };

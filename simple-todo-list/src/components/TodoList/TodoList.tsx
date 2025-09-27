@@ -1,15 +1,16 @@
 import React from 'react';
 import Todo from '../../interfaces/todoList';
-import TodoItem from '../TodoItem';
+import TodoItem from './TodoItem';
 
 
 interface TodoListProps {
     todosList: Todo[];
     todosChangedHandler: (todos: Todo[]) => void;
+    deleteHandler: (id: number) => void;
 }
 
 const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
-    const { todosList, todosChangedHandler } = props;
+    const { todosList, todosChangedHandler, deleteHandler } = props;
 
     return <div>
         <h2>Todos:</h2>
@@ -21,6 +22,7 @@ const TodoList: React.FC<TodoListProps> = (props: TodoListProps) => {
                 result[result.findIndex(td => td.id === todo.id)] = todo;
                 todosChangedHandler(result);
             }}
+            onDelete={deleteHandler}
         />)}
     </div>;
 };
