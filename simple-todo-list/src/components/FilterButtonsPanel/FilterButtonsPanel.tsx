@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from './FilterButtonsPanel.module.css';
-import Button from '../Button';
+import ActiveButton from './ActiveButton';
 
 
 interface FilterButtonsPanelProps {
@@ -12,9 +12,9 @@ interface FilterButtonsPanelProps {
 const FilterButtonsPanel: React.FC<FilterButtonsPanelProps> = ({onClickHandler, currentMode}) => {
 
     return (<div className={styles.filterButtonsPanel}>
-        <Button color='blue' onClick={() => onClickHandler('ALL')}>All</Button>
-        <Button color='blue' onClick={() => onClickHandler('ACTIVE')}>To Do</Button>
-        <Button color='blue' onClick={() => onClickHandler('DONE')}>Done</Button>
+        <ActiveButton isActive={currentMode === 'ALL'} color='blue' onClick={() => onClickHandler('ALL')}>All</ActiveButton>
+        <ActiveButton isActive={currentMode === 'ACTIVE'} color='blue' onClick={() => onClickHandler('ACTIVE')}>To Do</ActiveButton>
+        <ActiveButton isActive={currentMode === 'DONE'} color='blue' onClick={() => onClickHandler('DONE')}>Done</ActiveButton>
     </div>);
 };
 

@@ -6,11 +6,11 @@ interface ButtonProps extends React.ComponentPropsWithRef<'button'> {
     color: 'orange' | 'blue' | 'red'
 }
 
-const Button:React.FC<ButtonProps> = ({ children, color, onClick, ...props }) => {
-    const className = `${styles.button} ${styles[`button_${color}`]}`;
+const Button:React.FC<ButtonProps> = ({ children, color, onClick, className = '', ...props }) => {
+    const baseClassName = `${styles.button} ${styles[`button_${color}`]}`;
 
     return (
-        <button className={className} onClick={onClick} {...props}>
+        <button className={`${baseClassName} ${className}`.trim()} onClick={onClick} {...props}>
             {children}
         </button>
     );
