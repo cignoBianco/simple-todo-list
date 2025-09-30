@@ -6,8 +6,15 @@ import styles from './Panel.module.css';
 import Button from '../Button/Button';
 
 
-interface PanelProps {
+interface AddPanelProps {
+    mode: 'add';
     addTodo: ({ title, description }: Omit<Todo, 'checked' | 'id'>) => void;
+}
+
+interface EditPanelProps {
+    mode: 'edit';
+    editTodo: Omit<Todo, 'id' | 'checked'>;
+    editTodoHandler: ({ title, description }: Omit<Todo, 'id' | 'checked'>) => void;
 }
 
 const defaultTodo: Todo = {
@@ -16,8 +23,12 @@ const defaultTodo: Todo = {
     description: ''
 }
 
-const Panel: React.FC<PanelProps> = ({addTodo}) => {
-    const [todo, setTodo] = React.useState<Todo>(defaultTodo);
+type TodoPanelProps = AddPanelProps | EditPanelProps;
+
+const Panel: React.FC<TodoPanelProps> = (props) => {
+    const isEdit = props.mode === 'edit';
+
+    const [todo, setTodo] = React.useState<Omit<Todo, 'id' | 'checked'>>(isEdit ? props.editTodo : defaultTodo);
     const { title, description } = todo;
 
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,13 +36,18 @@ const Panel: React.FC<PanelProps> = ({addTodo}) => {
         setTodo({...todo, [name]: value});
     };
 
-    const addButtonHandler = () => {
+    const saveButtonHandler = () => {
         if (!todo || !todo.title) {
             console.warn('Todo is not filled');
             return;
         }
 
-        addTodo(todo);
+        if (isEdit) {
+            return props.editTodoHandler(todo);
+        }
+
+        props.addTodo(todo);
+
         setTodo(defaultTodo);
     };
 
@@ -63,8 +79,8 @@ const Panel: React.FC<PanelProps> = ({addTodo}) => {
                 </label>
             </div>
             <div className={styles.button_container}>
-                <Button color='blue' onClick={addButtonHandler}>
-                    ADD
+                <Button color='blue' onClick={saveButtonHandler}>
+                    SAVE
                 </Button>
             </div>
         </div>
