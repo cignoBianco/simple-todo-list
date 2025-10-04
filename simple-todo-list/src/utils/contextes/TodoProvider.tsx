@@ -7,14 +7,15 @@ interface TodoProviderProps {
     children: React.ReactNode;
 }
 
+export interface Mode {
+    filter: 'ALL' | 'ACTIVE' | 'DONE'
+};
+
 export const TodoProvider: React.FC<TodoProviderProps> = ({children}) => {
     const [todos, setTodos] = React.useState(DEFAULT_TODO_LIST);
     const [idIncr, setIdIncr] = React.useState(todos.length + 1);
     const [editTodoId, setEditTodoId] = React.useState<Todo['id'] | null>(null);
 
-    interface Mode {
-      filter: 'ALL' | 'ACTIVE' | 'DONE'
-    }
     const [mode, setMode] = React.useState<Mode>({filter: 'ALL'});
 
     const addTodo = ({ title, description }: Omit<Todo, 'checked' | 'id'>) => {
@@ -56,6 +57,8 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({children}) => {
 
     const value = React.useMemo(() => ({
         addTodo,
+        mode,
+        setMode,
         deleteTodo,
         selectTodoForId,
         editTodo,
@@ -72,7 +75,7 @@ export const TodoProvider: React.FC<TodoProviderProps> = ({children}) => {
         deleteHandler: deleteTodo,
         editClickHandler: selectTodoForId
     }), [
-        addTodo, selectTodoForId, editTodo, filterTodoList,
+        addTodo, selectTodoForId, editTodo, filterTodoList, mode,
         filterClickHandler, editTodoId, idIncr]);
 
     return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>
